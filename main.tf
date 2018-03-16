@@ -37,13 +37,15 @@ resource "aws_dynamodb_table" "terraform_remote_state" {
 # Create terraform remote state backend
 # When initializing stage for the first time, disable this and then enable it for remote state.
 
-terraform {
-  backend "s3" {
-    encrypt        = true
-    bucket         = "maxxsure-terraform-remote-state"
-    dynamodb_table = "maxxsure-terraform-remote-state"
-    region         = "us-east-1"
-    key            = "terraform.tfstat"
-    profile        = "maxxsure-dev"
-  }
-}
+
+# terraform {
+#   backend "s3" {
+#     encrypt        = true
+#     bucket         = "maxxsure-terraform-remote-state"
+#     dynamodb_table = "maxxsure-terraform-remote-state"
+#     region         = "us-east-1"
+#     key            = "terraform.tfstat"
+#     profile        = "maxxsure-dev"
+#   }
+# }
+

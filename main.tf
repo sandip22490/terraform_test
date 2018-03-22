@@ -12,31 +12,30 @@ data "aws_caller_identity" "current" {}
 
 # create S3 bucket to store the terraform remote state
 
-resource "aws_s3_bucket" "terraform_remote_state" {
-  bucket = "${var.project_name}-terraform-remote-state"
+# resource "aws_s3_bucket" "terraform_remote_state" {
+#   bucket = "${var.project_name}-terraform-remote-state"
 
-  versioning {
-    enabled = true
-  }
-}
+#   versioning {
+#     enabled = true
+#   }
+# }
 
 # Create dynamodb table for locking the remote state file
 
-resource "aws_dynamodb_table" "terraform_remote_state" {
-  name           = "${var.project_name}-terraform-remote-state"
-  hash_key       = "LockID"
-  read_capacity  = 1
-  write_capacity = 1
+# resource "aws_dynamodb_table" "terraform_remote_state" {
+#   name           = "${var.project_name}-terraform-remote-state"
+#   hash_key       = "LockID"
+#   read_capacity  = 1
+#   write_capacity = 1
 
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-}
+#   attribute {
+#     name = "LockID"
+#     type = "S"
+#   }
+# }
 
 # Create terraform remote state backend
 # When initializing stage for the first time, disable this and then enable it for remote state.
-
 
 # terraform {
 #   backend "s3" {
@@ -49,3 +48,14 @@ resource "aws_dynamodb_table" "terraform_remote_state" {
 #   }
 # }
 
+resource "aws_dynamodb_table" "temp-table" {
+  name           = "${var.project_name}-temp-table"
+  hash_key       = "tempId"
+  read_capacity  = 1
+  write_capacity = 1
+
+  attribute {
+    name = "tempId"
+    type = "S"
+  }
+}

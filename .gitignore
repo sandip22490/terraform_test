@@ -57,5 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 *.tfvars
+*.tfstate
+tfplan
 .terraform
 !terraform.tfvars

@@ -10,6 +10,7 @@ terragrunt = {
 
       arguments = [
         "-var-file=aws_access.tfvars",
+        "-input=false",
       ]
     }
   }

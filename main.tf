@@ -10,6 +10,11 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+terraform {
+  # The configuration for this backend will be filled in by Terragrunt
+  backend "s3" {}
+}
+
 # create S3 bucket to store the terraform remote state
 
 # resource "aws_s3_bucket" "terraform_remote_state" {

@@ -2,10 +2,9 @@ terragrunt = {
   terraform {
     extra_arguments "aws_access" {
       commands = [
-        "plan",
         "import",
-        "push",
         "refresh",
+        "plan",
       ]
 
       arguments = [

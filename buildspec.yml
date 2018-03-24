@@ -8,18 +8,24 @@ phases:
   install:
     commands:
       - sudo apt-get install zip gzip tar
+      - sudo apt-get install git
+      - curl -O -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+      - chmod +x jq-linux64
+      - sudo mv jq-linux64 /usr/bin/jq
       - wget https://releases.hashicorp.com/terraform/0.11.4/terraform_0.11.4_linux_amd64.zip
       - unzip terraform_0.11.4_linux_amd64.zip
       - sudo mv terraform /usr/local/bin/
-      - sudo wget -O /usr/local/bin/terragrunt $(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | jq '.assets|.[]|select(.name=="terragrunt_linux_amd64")|.browser_download_url')
-      - sudo chmod +x /usr/local/bin/terragrunt
+      - git clone https://github.com/cunymatthieu/tgenv.git ~/.tgenv
+      - export PATH="$HOME/.tgenv/bin:$PATH"
+      - tgenv install latest
+      - tgenv use latest
       - terraform --version
       - terragrunt --version
-      - curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq 'to_entries | [ .[] | select(.key | (contains("Expiration") or contains("RoleArn"))  | not) ] |  map(if .key == "AccessKeyId" then . + {"key":"AWS_ACCESS_KEY_ID"} else . end) | map(if .key == "SecretAccessKey" then . + {"key":"AWS_SECRET_ACCESS_KEY"} else . end) | map(if .key == "Token" then . + {"key":"AWS_SESSION_TOKEN"} else . end) | map("export \(.key)=\(.value)") | .[]' -r > /tmp/aws_cred_export.txt
-      - cat /tmp/aws_cred_export.txt
         
   build:
     commands:
-      - source /tmp/aws_cred_export.txt && terragrunt init --terragrunt-non-interactive 
-      - source /tmp/aws_cred_export.txt && terragrunt plan -out=tfplan -input=false
-      - source /tmp/aws_cred_export.txt && terragrunt apply -input=false tfplan
+      - curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq 'to_entries | [ .[] | select(.key | (contains("Expiration") or contains("RoleArn"))  | not) ] |  map(if .key == "AccessKeyId" then . + {"key":"TF_VAR_access_key"} else . end) | map(if .key == "SecretAccessKey" then . + {"key":"TF_VAR_secret_key"} else . end) | map(if .key == "Token" then . + {"key":"TF_VAR_access_token"} else . end) | map("export \(.key)=\(.value)") | .[]' -r > aws_access.tfvars
+      - echo "$(cat aws_access.tfvars)"
+      - terragrunt init --terragrunt-non-interactive
+      - terragrunt plan -out=tfplan -input=false
+      - terragrunt apply -input=false tfplan

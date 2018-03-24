@@ -24,8 +24,13 @@ phases:
         
   build:
     commands:
-      - curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq 'to_entries | [ .[] | select(.key | (contains("Expiration") or contains("RoleArn") or contains("Token"))  | not) ] |  map(if .key == "AccessKeyId" then . + {"key":"access_key"} else . end) | map(if .key == "SecretAccessKey" then . + {"key":"secret_key"} else . end) | map("\(.key)=\"\(.value)\"") | .[]' -r > aws_access.tfvars
-      - echo "$(cat aws_access.tfvars)"
+      - curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI -r > cred.json
+      - cat cred.json
+      - export AWS_SECRET_ACCESS_KEY=$(jq '.SecretAccessKey' cred.json)
+      - export AWS_ACCESS_KEY_ID=$(jq '.AccessKeyId' cred.json)
+      - export AWS_SESSION_TOKEN=$(jq '.Token' cred.json)
+      - export TF_VAR_secret_key=$(jq '.SecretAccessKey' cred.json)
+      - export TF_VAR_access_key=$(jq '.AccessKeyId' cred.json)
       - terragrunt init --terragrunt-non-interactive
       - terragrunt plan -out=tfplan
       - terragrunt apply tfplan

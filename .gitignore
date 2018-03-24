@@ -60,5 +60,4 @@ typings/
 *.tfstate
 tfplan
 .terraform
-!aws_access.tfvars
 !terraform.tfvars

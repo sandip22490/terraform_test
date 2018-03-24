@@ -30,3 +30,15 @@ resource "aws_dynamodb_table" "temp-table" {
     type = "S"
   }
 }
+
+resource "aws_dynamodb_table" "temp-table-another" {
+  name           = "${var.project_name}-temp-table-another"
+  hash_key       = "tempId"
+  read_capacity  = 1
+  write_capacity = 1
+
+  attribute {
+    name = "tempId"
+    type = "S"
+  }
+}

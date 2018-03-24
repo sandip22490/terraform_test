@@ -24,13 +24,6 @@ phases:
         
   build:
     commands:
-      - curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI -r > cred.json
-      - cat cred.json
-      - export AWS_SECRET_ACCESS_KEY=$(jq '.SecretAccessKey' cred.json)
-      - export AWS_ACCESS_KEY_ID=$(jq '.AccessKeyId' cred.json)
-      - export AWS_SESSION_TOKEN=$(jq '.Token' cred.json)
-      - export TF_VAR_secret_key=$(jq '.SecretAccessKey' cred.json)
-      - export TF_VAR_access_key=$(jq '.AccessKeyId' cred.json)
       - terragrunt init --terragrunt-non-interactive
       - terragrunt plan -out=tfplan
       - terragrunt apply tfplan

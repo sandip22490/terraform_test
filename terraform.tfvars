@@ -5,10 +5,10 @@ terragrunt = {
         "import",
         "refresh",
         "plan",
+        "apply",
       ]
 
       arguments = [
-        # "-var-file=${path_relative_to_include()}/aws_access.tfvars",
         "-input=false",
       ]
     }

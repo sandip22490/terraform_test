@@ -12,7 +12,7 @@ phases:
       - curl -O -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
       - chmod +x jq-linux64
       - sudo mv jq-linux64 /usr/bin/jq
-      - wget https://releases.hashicorp.com/terraform/0.11.4/terraform_0.11.5_linux_amd64.zip
+      - wget https://releases.hashicorp.com/terraform/0.11.5/terraform_0.11.5_linux_amd64.zip
       - unzip terraform_0.11.5_linux_amd64.zip
       - sudo mv terraform /usr/local/bin/
       - git clone https://github.com/cunymatthieu/tgenv.git ~/.tgenv

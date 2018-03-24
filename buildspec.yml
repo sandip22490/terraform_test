@@ -25,6 +25,7 @@ phases:
   build:
     commands:
       - curl 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq 'to_entries | [ .[] | select(.key | (contains("Expiration") or contains("RoleArn"))  | not) ] |  map(if .key == "AccessKeyId" then . + {"key":"TF_VAR_access_key"} else . end) | map(if .key == "SecretAccessKey" then . + {"key":"TF_VAR_secret_key"} else . end) | map(if .key == "Token" then . + {"key":"TF_VAR_access_token"} else . end) | map("export \(.key)=\(.value)") | .[]' -r > aws_access.tfvars
+      - chmod +x aws_access.tfvars
       - echo "$(cat aws_access.tfvars)"
       - terragrunt init --terragrunt-non-interactive
       - terragrunt plan -out=tfplan

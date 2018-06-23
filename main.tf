@@ -16,7 +16,7 @@ data "aws_caller_identity" "current" {}
 terraform {
   # The configuration for this backend will be filled in by Terragrunt
   backend          "s3"             {}
-  required_version = "0.11.5"
+  required_version = "0.11.7"
 }
 
 resource "aws_dynamodb_table" "temp-table" {
